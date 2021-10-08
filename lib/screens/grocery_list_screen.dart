@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../components/grocery_tile.dart';
 import '../models/models.dart';
-import 'grocery_item_screen.dart';
 
 class GroceryListScreen extends StatelessWidget {
   final GroceryManager manager;
+
   const GroceryListScreen({
     Key? key,
     required this.manager,
@@ -13,14 +14,12 @@ class GroceryListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final groceryItems = manager.groceryItems;
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView.separated(
         itemCount: groceryItems.length,
         itemBuilder: (context, index) {
           final item = groceryItems[index];
-
           return Dismissible(
             key: Key(item.id),
             direction: DismissDirection.endToStart,
@@ -35,7 +34,6 @@ class GroceryListScreen extends StatelessWidget {
             ),
             onDismissed: (direction) {
               manager.deleteItem(index);
-
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('${item.name} dismissed'),
@@ -44,27 +42,16 @@ class GroceryListScreen extends StatelessWidget {
             },
             child: InkWell(
               child: GroceryTile(
-                  item: item,
-                  key: Key(item.id),
-                  onComplete: (change) {
-                    if (change != null) {
-                      manager.completeItem(index, change);
-                    }
-                  }),
+                key: Key(item.id),
+                item: item,
+                onComplete: (change) {
+                  if (change != null) {
+                    manager.completeItem(index, change);
+                  }
+                },
+              ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GroceryItemScreen(
-                      originalItem: item,
-                      onUpdate: (item) {
-                        manager.updateItem(item, index);
-                        Navigator.pop(context);
-                      },
-                      onCreate: (item) {},
-                    ),
-                  ),
-                );
+                // TODO: Tap on grocery item
               },
             ),
           );
